@@ -1,8 +1,86 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { VideoCameraIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
-
+import { useLocation } from 'react-router';
+import {getListUsers, sendMessage, listenMessages} from '../api/MessageApi';
 
 function AppChat(props) {
+    const location = useLocation();
+    const { user } = location.state || { user: null };
+
+
+
+    const [currentUserChat, setCurrentUserChat] = useState(null);
+
+
+    const [chatData, setChatData] = useState([]);
+
+    const [messageData, setMessageData] = useState({
+        content: '',
+        sender: user?.email ?? '',          // guard an toàn
+        receiver: currentUserChat?.email ?? ''
+    });
+
+     // Đồng bộ receiver khi chọn user chat
+    useEffect(() => {
+        setMessageData(prev => ({ ...prev, sender: user?.email ?? '', receiver: currentUserChat?.email ?? '' }));
+    }, [user?.email, currentUserChat?.email]);
+
+
+    useEffect(() => {
+        if (!user?.email || !currentUserChat?.email) {
+            console.log("email listen:", user?.email, currentUserChat?.email);
+            return;
+        };
+        const unsubscribe = listenMessages(user.email, currentUserChat.email, (messages) => {
+            setChatData(messages);
+        });
+        return () => unsubscribe && unsubscribe();
+    }, [user?.email, currentUserChat?.email]);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setMessageData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleSendMessage = async () => {
+        const content = messageData.content.trim();
+        console.log("Message sent:", messageData);
+        if (!content || !currentUserChat || !user?.email) {
+            console.log("content", content)
+            console.log("currentUserChat", currentUserChat)
+            console.log("user?.email", user?.email)
+            return;
+        };
+        await sendMessage({
+        content,
+        sender: user.email,
+        receiver: currentUserChat.email
+        });
+        
+        // clear input
+        setMessageData(prev => ({ ...prev, content: '' }));
+    };
+    console.log("chatdata:", chatData);
+
+    const handleUserClick = (user) => {
+        setCurrentUserChat(user);
+       
+    }
+
+    const [listUsers, setListUsers] = useState([]);
+
+    console.log("current user:", currentUserChat)
+
+    useEffect(() =>  {
+        const fetchData = async () => {
+            if (user) {
+                const listUsersData = await getListUsers(user.email);
+                setListUsers(listUsersData);
+            }
+        }
+        fetchData();
+    }, [user]);
+
     return (
         <div className="h-screen bg-black grid grid-flow-col md:grid-cols-[320px_1fr]">
             <div className="bg-white flex flex-col min-h-0">
@@ -19,12 +97,12 @@ function AppChat(props) {
 
 
                 <div className="min-h-0 flex-1 overflow-y-auto">
-                    {[1,2,3,4,5,6,7,8,9,10,11,12].map(() => (
-                        <div className="w-full p-4 bg-white flex items-center gap-3 hover:bg-gray-200">
+                    {listUsers.map((user) => (
+                        <div className="w-full p-4 bg-white flex items-center gap-3 hover:bg-gray-200" key={user.id} onClick={() => handleUserClick(user)}>
                             <img className="h-10 w-10" src="https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"></img>
                             <div className="flex-1 text-left">
                                 <div className="flex items-center justify-between">
-                                    <p className="font-medium">Username</p>
+                                    <p className="font-medium">{user.username}</p>
                                     <span className="text-xs text-gray-500">9:11 pm</span>
                                 </div>
                                 <p className="text-sm text-gray-500 truncate">Last message</p>
@@ -39,7 +117,7 @@ function AppChat(props) {
                     <img className="h-15 w-15" src="https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"></img>
                     <div className="w-full flex text-left items-center justify-between ms-4">
                         <div>
-                            <h2 className="text-2xl font-bold leading-tight">Username</h2>
+                            <h2 className="text-2xl font-bold leading-tight">{currentUserChat?.username || "Unknown User"}</h2>
                             <p className="text-md text-emerald-600">Online</p>
                         </div>
                          <div className="flex items-center gap-4">
@@ -54,89 +132,29 @@ function AppChat(props) {
 
 
                 <div className="min-h-0 overflow-y-auto bg-white border border-gray-300 space-y-6 pb-3">
-                    {/* Message receive */}
-                    <div className="flex items-start p-4 gap-3">
-                        <img class="h-12 w-12 rounded-full object-cover" src="https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png" />
-                        <div class="max-w-[70%] rounded-2xl bg-white px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
+                    {chatData.map((chat) => (
+                        <>
+                        {chat.sender !== user.email ? (
+                        <div className="flex items-start p-4 gap-3">
+                            <img class="h-12 w-12 rounded-full object-cover" src="https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png" />
+                            <div class="max-w-[70%] rounded-2xl bg-white px-4 py-2 shadow-sm">
+                                <p className="text-gray-500">{chat.content}</p>
+                            </div>
                         </div>
-                    </div>
-
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
+                        ) : (
+                        <div className="flex justify-end">
+                            <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
+                                <p className="text-gray-500">{chat.content}</p>
+                            </div>
                         </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
-                    {/* Message send */}
-                     <div className="flex justify-end">
-                        <div class="max-w-[70%] rounded-2xl bg-blue-50 px-4 py-2 shadow-sm">
-                            <p className="text-gray-500">This is a chat area This is a chat area where messages will be displayed.</p>
-                        </div>
-                    </div>
+                        )}
+                        </>
+                    ))}
                 </div>
 
-
-
-
-
                 <div className="bg-white flex border border-gray-300 px-4 py-4 gap-3">
-                    <input type="text" placeholder="Type your message..." className="flex-1 bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 focus:outline-1 focus:border-gray-300" />
-                    <button className="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-600 transition-colors">
+                    <input onChange={handleChange} type="text" name="content"  placeholder="Type your message..." className="flex-1 bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 focus:outline-1 focus:border-gray-300" />
+                    <button onClick={() => handleSendMessage()}   className="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-600 transition-colors">
                         Send
                     </button>
                 </div>

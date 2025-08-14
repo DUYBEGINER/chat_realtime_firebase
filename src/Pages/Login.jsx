@@ -22,9 +22,10 @@ function Login(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { email, password } = accountData;
-        try{
-             await login( email, password );
-        }catch(error){
+        const loginData = await login( email, password );
+        if (loginData) {
+            navigate("/appchat", { state: { user: loginData } });
+        }else{
             window.alert("Tên đăng nhập hoặc mật khẩu không đúng!");
         }
        

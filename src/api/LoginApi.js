@@ -23,10 +23,10 @@ export const login = async (email, password) => {
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
         console.log(querySnapshot.docs[0].data());
-        return true;
-  } else {
+        return querySnapshot.docs[0].data();
+    } else {
         console.log("Không tìm thấy user!");
-        return false;
+        return null;
   }
 }
 // const querySnapshot = await getDocs(collection(db, "users"));

@@ -5,6 +5,7 @@ import { addNewAccount, checkAccountExisted } from '../api/RegisterApi';
 function Register(props) {
     const [accountData, setAccountData] = useState({
         email: "",
+        username: "",
         password: "",
         confirmPassword: ""
     });
@@ -22,7 +23,7 @@ function Register(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { email, password, confirmPassword } = accountData;
+        const { email, password, confirmPassword, username } = accountData;
         if (password !== confirmPassword) {
             window.alert("Passwords do not match!");
             return;
@@ -32,7 +33,9 @@ function Register(props) {
             window.alert("Tài khoản đã tồn tại!");
             return;
         }
-        await addNewAccount({ email, password });
+        await addNewAccount({ email, password , username});
+        window.alert("Đăng ký thành công!");
+        window.location.href = "/";
     };
 
     return (
@@ -63,6 +66,21 @@ function Register(props) {
                             />
                         </div>
                     </div>
+
+                    <div>
+                        <label htmlFor="username" className='block text-sm/6 font-medium text-gray-100'>Username:</label>
+                        <div className="mt-2">
+                            <input
+                                id="username"
+                                type="text"
+                                name="username"
+                                onChange={handleChange}
+                                required
+                                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500 sm:text-sm/6"
+                            />
+                        </div>
+                    </div>
+
 
                     {/* Password */}
                     <div>
@@ -114,7 +132,7 @@ function Register(props) {
                             type="submit"
                             className="flex justify-center bg-indigo-500 text-white px-3 py-1.5 w-full text-sm/6 font-semibold rounded hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-indigo-500"
                         >
-                            Login
+                            Sign up
                         </button>
                     </div>
                 </form>
