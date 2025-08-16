@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { useLocation } from 'react-router';
-import {getConversations, sendMessage, listenMessages} from '../api/MessageApi';
-import HeaderApp from '../components/HeaderApp';
-import Toggle from '../components/Toggle';
-
+import {getConversations, sendMessage, listenMessages} from '../../api/MessageApi';
+import HeaderApp from '../../components/HeaderApp';
+import Toggle from '../../components/Toggle';
+import {AuthContext} from '../../context/AuthProvider';
 
 function AppChat(props) {
     const location = useLocation();
-    const { user } = location.state || { user: null };
+    const { user } = useContext(AuthContext);
 
     const [currentUserChat, setCurrentUserChat] = useState(null);
     const [chatData, setChatData] = useState([]);

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
-import AppChat from './Pages/AppChat'
+import AppChat from './Pages/ChatRoom/AppChat'
 import { Routes, Route } from 'react-router'
 import { ToastContainer } from "react-toastify";
 import  AuthProvider from './context/AuthProvider';

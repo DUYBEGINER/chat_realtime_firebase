@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import Spiner from '../components/Spiner';
 
 
-const AuthContext = React.createContext();
+export const AuthContext = React.createContext(null);
 
 function AuthProvider({children}) {
 
