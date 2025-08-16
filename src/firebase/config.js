@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth,
-  connectAuthEmulator,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 
 
@@ -34,18 +34,11 @@ const auth = getAuth(app);
 // // Firebase Auth Emulator
 // connectAuthEmulator(auth, "http://localhost:9099");
 
-export async function loginEmailPassword(email, password) {
-  const cred = await signInWithEmailAndPassword(auth, email, password);
-  
-  //Chỉ lấy những dữ liệu cần thiết
-  const data = {
-    email: cred.user.email,
-    uid: cred.user.uid,
-    displayName: cred.user.displayName || "Anonymous",
-  };
-  return data; // <- trả về user để UI dùng
-}
 
-
+// Dùng emulator khi dev (nếu bạn test local)
+// if (import.meta.env.DEV || window.location.hostname === "localhost") {
+//   connectAuthEmulator(auth, "http://127.0.0.1:9099", { disableWarnings: true });
+//   connectFirestoreEmulator(db, "127.0.0.1", 8080);
+// }
 export { db, auth };
 

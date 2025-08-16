@@ -2,9 +2,8 @@ import React, {useState} from 'react';
 import {login} from '../api/LoginApi';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router';
-import { loginEmailPassword } from '../firebase/config';
-
-
+import {loginEmailPassword, loginWithFacebook} from '../api/authAPI'; // Import the login function
+import { toast } from "react-toastify";
 
 function Login(props) {
      const [accountData, setAccountData] = useState({
@@ -14,7 +13,15 @@ function Login(props) {
     
     
     // const handleFblogin = () =>{
-
+    //     loginWithFacebook()
+    //     .then((user) => {
+    //         console.log("Facebook login successful:", user);
+    //         navigate("/appchat", { state: { user: user } });
+    //     })
+    //     .catch((error) => {
+    //         console.error("Error logging in with Facebook:", error);
+    //         toast.error("Đăng nhập bằng Facebook thất bại!");
+    //     });
     // }
 
     const navigate = useNavigate();
@@ -38,7 +45,7 @@ function Login(props) {
                 navigate("/appchat", { state: { user: user } });
             }
         } catch (e) {
-            window.alert("Tên đăng nhập hoặc mật khẩu không đúng!");
+            toast.error("Tên đăng nhập hoặc mật khẩu không đúng!");
             console.log(e.message);
         }
     }
@@ -49,7 +56,7 @@ function Login(props) {
              {/* Logo Tailwind */}
             <div class="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" class="mx-auto h-10 w-auto" />
-                <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Sign in to your account</h2>
+                <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Đăng nhập vào AppChat</h2>
             </div>
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -76,9 +83,9 @@ function Login(props) {
                 </form>
                 <div className="mt-6">
                     <p className="text-center text-sm text-gray-100">
-                        Don't have an account?{' '}
+                        Chưa có tài khoản?{' '}
                         <Link to="/register" className="font-semibold text-indigo-500 hover:text-indigo-400">
-                            Sign up
+                            Đăng kí
                         </Link>
                     </p>
                 </div>

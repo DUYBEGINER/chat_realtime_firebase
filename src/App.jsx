@@ -4,15 +4,28 @@ import Login from './Pages/Login'
 import Register from './Pages/Register'
 import AppChat from './Pages/AppChat'
 import { Routes, Route } from 'react-router'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() { useState(0)
 
   return (
     <div className="app-container bg-slate-800 ">
+      <ToastContainer 
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        pauseOnHover
+        theme="colored"
+      />
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/appchat" element={<AppChat />} />
       </Routes>
+
     </div>
   )
 }
