@@ -1,4 +1,5 @@
 import {auth, db} from "../firebase/config";
+
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
@@ -6,9 +7,13 @@ import {
     FacebookAuthProvider,
     sendEmailVerification,
     updateProfile,
+    signOut,
 } from "firebase/auth";
+
 import { doc, setDoc, getDocs, serverTimestamp,  collection, query, where } from "firebase/firestore";
 
+
+const provider = new FacebookAuthProvider();
 
 // Login function
 export async function loginEmailPassword(email, password) {
@@ -45,25 +50,23 @@ export async function loginEmailPassword(email, password) {
 
 export async function loginWithFacebook() {
   try {
-    const provider = new FacebookAuthProvider();
     await signInWithPopup(auth, provider);
-    // const user = result.user;
-
-    // // Save user to Firestore
-    // await setDoc(doc(db, "accounts", user.uid), {
-    //   uid: user.uid,
-    //   email: user.email,
-    //   username: user.displayName || "Anonymous",
-    //   provider: "facebook",
-    //   createdAt: serverTimestamp(),
-    // });
-
-    // return user;
   } catch (error) {
     console.error("Error logging in with Facebook:", error);
     throw error;
   }
 }
+
+export async function Logout(){
+  try{
+    await signOut(auth);
+    return true;
+  } catch (error) {
+    console.error("Error logging out:", error);
+    throw error;
+  }
+}
+
 
 export async function signUpWithEmailPassword({
   email,

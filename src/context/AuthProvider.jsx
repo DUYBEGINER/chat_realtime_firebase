@@ -37,14 +37,6 @@ function AuthProvider({children}) {
         return () => unsubcribe();
     }, [navigate]);
 
-    // const login = async (email, password) => {
-    //     try {
-    //         await auth.signInWithEmailAndPassword(email, password);
-    //         navigate('/chat');
-    //     } catch (error) {
-    //         console.error("Error logging in:", error);
-    //     }
-    // };
 
     // const logout = async () => {
     //     try {
