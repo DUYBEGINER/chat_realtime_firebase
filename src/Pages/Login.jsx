@@ -2,12 +2,21 @@ import React, {useState} from 'react';
 import {login} from '../api/LoginApi';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router';
+import { loginEmailPassword } from '../firebase/config';
+
+
+
 function Login(props) {
      const [accountData, setAccountData] = useState({
             email: "",
             password: "",
         });
     
+    
+    // const handleFblogin = () =>{
+
+    // }
+
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -22,13 +31,16 @@ function Login(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { email, password } = accountData;
-        const loginData = await login( email, password );
-        if (loginData) {
-            navigate("/appchat", { state: { user: loginData } });
-        }else{
+        try {
+            const user = await loginEmailPassword(email, password);
+            console.log(user);
+            if(user) {
+                navigate("/appchat", { state: { user: user } });
+            }
+        } catch (e) {
             window.alert("Tên đăng nhập hoặc mật khẩu không đúng!");
+            console.log(e.message);
         }
-       
     }
 
 
@@ -54,7 +66,10 @@ function Login(props) {
                             <input  onChange={(e)=>handleChange(e)} type="password" id="password" name="password" required className='block rounded-md w-full  outline-1  -outline-1 outline-white/10 bg-white/5 px-3 py-1.5 text-base text-white placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6' />
                         </div>
                     </div>
-                
+
+                    <div>
+                        <button className="w-full px-3 py-1.5 border border-blue-600 text-blue-500 hover:bg-blue-500 hover:text-white">Facebook Login</button>
+                    </div>
                     <div>
                         <button type="submit" className="flex justify-center bg-indigo-500 text-white px-3 py-1.5 w-full text-sm/6 font-semibold rounded hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Login</button>
                     </div>

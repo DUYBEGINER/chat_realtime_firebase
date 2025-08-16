@@ -1,4 +1,4 @@
-import { db } from "../firebaseConfig"; // 🔹 Import db từ file config
+// import { db } from "../firebase/config"; // 🔹 Import db từ file config
 import {
   collection,
   addDoc,

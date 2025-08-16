@@ -1,6 +1,7 @@
 html, body {
   height: 100%;
   margin: 0;
+  padding: 0;
 }
 .app-container {
   min-height: 100vh; /* 100% chiều cao màn hình */

@@ -1,4 +1,4 @@
-import { db } from "../firebaseConfig"; // 🔹 Import db từ file config
+import { db } from "../firebase/config"; // 🔹 Import db từ file config
 import {
   collection,
   addDoc,
@@ -11,12 +11,15 @@ import {
   orderBy,
   serverTimestamp
 } from "firebase/firestore";
+
+
+
 const makeParticipantsKey = (a, b) => [a, b].sort().join("__");
 const account = collection(db, "accounts");
 const messagesCollection = collection(db, "messages");
 
 // Lấy danh sách user khác mình – cách A: dùng '!=' + orderBy (cần index)
-export const getListUsers = async (email) => {
+export const getConversations = async (email) => {
   const q = query(account, where("email", "!=", email), orderBy("email", "asc"));
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
