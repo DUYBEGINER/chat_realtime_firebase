@@ -6,23 +6,24 @@ import {loginEmailPassword, loginWithFacebook} from '../api/authAPI'; // Import 
 import { toast } from "react-toastify";
 
 function Login(props) {
+
      const [accountData, setAccountData] = useState({
             email: "",
             password: "",
         });
     
     
-    // const handleFblogin = () =>{
-    //     loginWithFacebook()
-    //     .then((user) => {
-    //         console.log("Facebook login successful:", user);
-    //         navigate("/appchat", { state: { user: user } });
-    //     })
-    //     .catch((error) => {
-    //         console.error("Error logging in with Facebook:", error);
-    //         toast.error("Đăng nhập bằng Facebook thất bại!");
-    //     });
-    // }
+    const handleFblogin = () =>{
+        loginWithFacebook()
+        .then((user) => {
+            console.log("Facebook login successful:", user);
+            // navigate("/appchat", { state: { user: user } });
+        })
+        .catch((error) => {
+            console.error("Error logging in with Facebook:", error);
+            toast.error("Đăng nhập bằng Facebook thất bại!");
+        });
+    }
 
     const navigate = useNavigate();
 
@@ -75,7 +76,7 @@ function Login(props) {
                     </div>
 
                     <div>
-                        <button className="w-full px-3 py-1.5 border border-blue-600 text-blue-500 hover:bg-blue-500 hover:text-white">Facebook Login</button>
+                        <button onClick={handleFblogin} className="w-full px-3 py-1.5 border border-blue-600 text-blue-500 hover:bg-blue-500 hover:text-white">Facebook Login</button>
                     </div>
                     <div>
                         <button type="submit" className="flex justify-center bg-indigo-500 text-white px-3 py-1.5 w-full text-sm/6 font-semibold rounded hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Login</button>

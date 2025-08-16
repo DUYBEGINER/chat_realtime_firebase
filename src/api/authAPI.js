@@ -46,19 +46,19 @@ export async function loginEmailPassword(email, password) {
 export async function loginWithFacebook() {
   try {
     const provider = new FacebookAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+    await signInWithPopup(auth, provider);
+    // const user = result.user;
 
-    // Save user to Firestore
-    await setDoc(doc(db, "accounts", user.uid), {
-      uid: user.uid,
-      email: user.email,
-      username: user.displayName || "Anonymous",
-      provider: "facebook",
-      createdAt: serverTimestamp(),
-    });
+    // // Save user to Firestore
+    // await setDoc(doc(db, "accounts", user.uid), {
+    //   uid: user.uid,
+    //   email: user.email,
+    //   username: user.displayName || "Anonymous",
+    //   provider: "facebook",
+    //   createdAt: serverTimestamp(),
+    // });
 
-    return user;
+    // return user;
   } catch (error) {
     console.error("Error logging in with Facebook:", error);
     throw error;
