@@ -18,9 +18,9 @@ function AuthProvider({children}) {
         const unsubcribe = auth.onAuthStateChanged(user => {
             console.log(user);
             if(user) {
-                const {displayname, uid, email, photoURL } = user;
+                const {displayName, uid, email, photoURL } = user;
                 setUser({
-                    displayname, 
+                    displayName, 
                     uid, 
                     email, 
                     photoURL 
