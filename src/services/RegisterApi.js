@@ -1,15 +1,9 @@
 import { db } from "../firebase/config"; // 🔹 Import db từ file config
 import {
   collection,
-  addDoc,
-  onSnapshot,
-  deleteDoc,
-  doc,
   where,
   getDocs,
   query,
-  orderBy,
-  serverTimestamp
 } from "firebase/firestore";
 
 const account = collection(db, "accounts");

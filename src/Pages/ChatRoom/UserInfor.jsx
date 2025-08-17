@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button, Flex} from 'antd'
 import { Logout } from '../../services/authAPI'; 
-
+import { AuthContext } from '../../context/AuthProvider';
 
 function UserInfor(props) {
-    const { user } = props;
+   const { user } = useContext(AuthContext);
     console.log("UserInfor", user);
     return (
         <div className='flex items-center justify-between'>
