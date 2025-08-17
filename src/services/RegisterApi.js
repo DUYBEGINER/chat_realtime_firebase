@@ -15,23 +15,11 @@ import {
 const account = collection(db, "accounts");
 
 // 🔹 Lấy account
-export const checkAccountExisted = (email) => {
+export const checkAccountExisted = async (email) => {
   const q = query(account, where("email", "==", email));
-  return getDocs(q).then((querySnapshot) => {
-    if (!querySnapshot.empty) {
-      console.log("Tài khoản đã tồn tại!");
-      return true;
-    } else {
-      return false;
-    }
-  });
+  const snap = await getDocs(q);
+  return !snap.empty;
 };
 
-// export const addNewAccount = async (accountData) => {
-//     const account = collection(db, "accounts");
-//      await addDoc(account, {
-//       ...accountData,
-//       createdAt: serverTimestamp()
-//     });
-// }
+
 

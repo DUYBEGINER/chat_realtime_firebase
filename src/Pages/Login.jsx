@@ -28,7 +28,7 @@ function Login(props) {
       const { user, additionalUserInfo } = await loginWithFacebook();
 
       if (additionalUserInfo?.isNewUser) {
-        addDocument("users", {
+        addDocument("accounts", {
           uid: user.uid,
           email: user.email,
           photoURL: user.photoURL,

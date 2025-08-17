@@ -1,12 +1,13 @@
-import { getFirestore, collection, doc, setDoc, updateDoc, FieldValue } from "firebase/firestore";
+import { getFirestore, collection, doc, setDoc, updateDoc, serverTimestamp, } from "firebase/firestore";
 import {db} from '../firebase/config'; // 🔹 Import db from config
 
-export const addDocument = (collection, data) => {
-    const query = collection(db, collection);
+export const addDocument = (collectionName, data) => {
+    console.log("Adding document to collection:", collectionName, data);
+    const query = collection(db, collectionName);
 
    setDoc(doc(query), {
        ...data,
-       createdAt: FieldValue.serverTimestamp(),
+       createdAt: serverTimestamp(),
    });
    
 }

@@ -58,7 +58,7 @@ function Register(props) {
       //Call API Sign up with firebase
       const user = await signUpWithEmailPassword({ email, password });
       if (user) {
-        addDocument("users", {
+        addDocument("accounts", {
           uid: user.uid,
           email: user.email,
           displayName: displayName,
