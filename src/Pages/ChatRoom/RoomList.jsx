@@ -1,16 +1,36 @@
-import React from "react";
+import React, { use } from "react";
+import useFirestore from "../../hook/useFirestore";
+import { AuthContext } from "../../context/AuthProvider";
 
 function RoomList(props) {
-  const { conversations, handleUserClick } = props;
 
-  
+  const {user: { uid }} = React.useContext(AuthContext);
+  /**
+   * {
+   * name: 'room name',
+   * description: 'mo ta',
+   * members: ['user1', 'user2']
+   * }
+   */
+
+  const roomsCondition = React.useMemo(() => {
+    return {
+      fieldName: "members",
+      operator: "array-contains",
+      compareValue: uid
+    }
+  }, [uid])
+
+  const rooms = useFirestore("rooms", roomsCondition);
+
+  console.log("Rooms:", rooms);
+
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
-      {conversations.map((user) => (
+      {rooms.map((room) => (
         <div
           className="w-full p-4 bg-white  flex items-center gap-3 hover:bg-gray-200 dark:bg-transparent dark:hover:bg-gray-700"
-          key={user.id}
-          onClick={() => handleUserClick(user)}
+          key={room.id}
         >
           <img
             className="h-10 w-10"
@@ -19,13 +39,13 @@ function RoomList(props) {
           <div className="flex-1 text-left">
             <div className="flex items-center justify-between">
               <p className="font-semibold text-zinc-800 dark:text-white">
-                {user.username}
+                {room.name}
               </p>
               <span className="text-xs text-gray-500 dark:text-zinc-200">
                 9:11 pm
               </span>
             </div>
-            <p className="text-sm text-gray-500 truncate">Last message</p>
+            <p className="text-sm text-gray-500 truncate">{room.description}</p>
           </div>
         </div>
       ))}

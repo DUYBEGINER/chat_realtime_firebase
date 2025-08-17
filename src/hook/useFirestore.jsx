@@ -4,6 +4,7 @@ import {
   collection,
   onSnapshot,
   where,
+  query,
   orderBy,
 } from "firebase/firestore";
 
@@ -12,18 +13,22 @@ const useFirestore = (collectionName, condition) => {
 
   React.useEffect(() => {
     let coollectionRef = collection(db, collectionName);
-    const query = query(coollectionRef, orderBy("createdAt", "desc"));
+    let q = query(coollectionRef, orderBy("createdAt", "desc"));
+    
     if (condition) {
       if (!condition.compareValue || !condition.compareValue.length) {
+        console.log("No compareValue provided, returning empty array");
+        setDocuments([]);
         return;
       }
-      coollectionRef = query(
+        q = query(
         coollectionRef,
-        where(condition.fieldName, condition.operator, condition.compareValue)
+        where(condition.fieldName, condition.operator, condition.compareValue),
+        orderBy("createdAt", "desc")
       );
     }
 
-    return onSnapshot(query, (snapshot) => {
+    return onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
