@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   FacebookAuthProvider,
+  getAdditionalUserInfo,
   signOut,
 } from "firebase/auth";
 
@@ -12,6 +13,7 @@ import { doc, setDoc, getDocs, serverTimestamp, collection, query, where } from 
 
 
 const provider = new FacebookAuthProvider();
+provider.addScope('email');
 
 // Login function (use Email and Password)
 export async function loginEmailPassword(email, password) {
@@ -49,7 +51,11 @@ export async function loginEmailPassword(email, password) {
 //Login with Facebook function
 export async function loginWithFacebook() {
   try {
-    await signInWithPopup(auth, provider);
+    const user = await signInWithPopup(auth, provider);
+    // Get additional user info (isNewUser, profile, etc.)
+    const additional = getAdditionalUserInfo(user);
+    console.log("User additionalUserInfo:", additional);
+    return user;
   } catch (error) {
     console.error("Error logging in with Facebook:", error);
     throw error;

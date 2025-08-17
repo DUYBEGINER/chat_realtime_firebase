@@ -12,18 +12,7 @@ function Login(props) {
     password: "",
   });
 
-  //LOGIN WITH FACEBOOK
-  const handleFblogin = () => {
-    loginWithFacebook()
-      .then((user) => {
-        console.log("Facebook login successful:", user);
-      })
-      .catch((error) => {
-        console.error("Error logging in with Facebook:", error);
-        toast.error("Đăng nhập bằng Facebook thất bại!");
-      });
-  };
-
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAccountData({
@@ -32,12 +21,26 @@ function Login(props) {
     });
   };
 
-  const handleSubmit = async (e) => {
+  //LOGIN WITH FACEBOOK
+  const handle_Fblogin = () => {
+    loginWithFacebook()
+      .then((user) => {
+        console.log("Facebook login successful:", user);
+        console.log("User additionalUserInfo:", user.additionalUserInfo);
+      })
+      .catch((error) => {
+        console.error("Error logging in with Facebook:", error);
+        toast.error("Đăng nhập bằng Facebook thất bại!");
+      });
+  };
+
+  //LOGIN WITH EMAIL AND PASSWORD
+  const handle_LoginWithEmailAndPassword = async (e) => {
     e.preventDefault();
     const { email, password } = accountData;
     try {
       const user = await loginEmailPassword(email, password);
-      console.log({user});
+      console.log({ user });
       if (user) {
         navigate("/appchat", { state: { user: user } });
       }
@@ -62,7 +65,11 @@ function Login(props) {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form action="#" className="space-y-6" onSubmit={handleSubmit}>
+        <form
+          action="#"
+          className="space-y-6"
+          onSubmit={handle_LoginWithEmailAndPassword}
+        >
           <div>
             <label
               htmlFor="username"
@@ -103,7 +110,7 @@ function Login(props) {
 
           <div>
             <button
-              onClick={handleFblogin}
+              onClick={handle_Fblogin}
               className="w-full px-3 py-1.5 border border-blue-600 text-blue-500 hover:bg-blue-500 hover:text-white"
             >
               Facebook Login
