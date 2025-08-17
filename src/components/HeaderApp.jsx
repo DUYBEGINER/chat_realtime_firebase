@@ -1,28 +1,18 @@
 import React, {useState} from 'react';
-import { VideoCameraIcon, InformationCircleIcon } from '@heroicons/react/24/outline';
+import { VideoCameraIcon, InformationCircleIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import SwitchThemeBtn from './SwitchThemeBtn';
 import useTheme from '../hook/useTheme';
-import LogoutBtn from '../components/InforUser';
-import {Logout} from '../api/authAPI';
 import { useNavigate } from 'react-router';
+import { Avatar, Divider, Tooltip, Button } from 'antd';
 
 function HeaderApp(props) {
     const {currentUserChat} = props;
-    const navigate = useNavigate();
 
     const [theme, setTheme] = useTheme('light');
 
     const switchTheme = () => {
         console.log("Switching theme", theme);
         setTheme(theme === 'light' ? 'dark' : 'light');
-    };
-
-    const handleLogout = async () => {
-        const confirmed = window.confirm("Are you sure you want to log out?");
-        if (confirmed) {
-            await Logout();
-            navigate("/");
-        }  
     };
 
     return (
@@ -33,9 +23,29 @@ function HeaderApp(props) {
                     <h2 className="text-2xl font-bold leading-tight dark:text-white">{currentUserChat?.username || "Unknown User"}</h2>
                     <p className="text-md text-emerald-600">Online</p>
                 </div>
-                <div className="flex gap-5">
+                <div className="flex gap-8">
                     <SwitchThemeBtn theme={theme} switchTheme={switchTheme} />
-                    <LogoutBtn onLogout={handleLogout} />
+                    {/* <LogoutBtn onLogout={handleLogout} /> */}
+                    <div className="flex gap-3 items-center" >
+                        <Button icon={<UserPlusIcon className="w-6 h-6" />}>Mời</Button>
+                        <Avatar.Group size="small" max={{
+                                count: 2,
+                                style: { color: '#f56a00', backgroundColor: '#fde3cf' },
+                            }}>
+                            <Tooltip title="A">
+                                <Avatar >A</Avatar>
+                            </Tooltip>
+                            <Tooltip title="B">
+                                <Avatar >B</Avatar>
+                            </Tooltip>
+                            <Tooltip title="D">
+                                <Avatar >D</Avatar>
+                            </Tooltip>
+                            <Tooltip title="C">
+                                <Avatar >C</Avatar>
+                            </Tooltip>
+                        </Avatar.Group>
+                    </div>
                 </div>
             </div>
         </div>
