@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { useLocation } from 'react-router';
 import {getConversations, sendMessage, listenMessages} from '../../api/MessageApi';
-import HeaderApp from '../../components/HeaderApp';
+import HeaderApp from './HeaderApp';
 import Toggle from '../../components/Toggle';
 import SideBar from './SideBar';
 import {AuthContext} from '../../context/AuthProvider';
