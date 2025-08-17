@@ -37,7 +37,7 @@ function Login(props) {
     const { email, password } = accountData;
     try {
       const user = await loginEmailPassword(email, password);
-      console.log(user);
+      console.log({user});
       if (user) {
         navigate("/appchat", { state: { user: user } });
       }

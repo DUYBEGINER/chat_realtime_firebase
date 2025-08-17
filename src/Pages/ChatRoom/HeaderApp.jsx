@@ -2,12 +2,9 @@ import React, {useState} from 'react';
 import { VideoCameraIcon, InformationCircleIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import SwitchThemeBtn from '../../components/SwitchThemeBtn';
 import useTheme from '../../hook/useTheme';
-import { useNavigate } from 'react-router';
 import { Avatar, Divider, Tooltip, Button } from 'antd';
 
 function HeaderApp(props) {
-    const {currentUserChat} = props;
-
     const [theme, setTheme] = useTheme('light');
 
     const switchTheme = () => {

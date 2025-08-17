@@ -1,6 +1,8 @@
 import React from 'react';
 import {Button, Flex} from 'antd'
 import { Logout } from '../../api/authAPI'; 
+
+
 function UserInfor(props) {
     const { user } = props;
     console.log("UserInfor", user);

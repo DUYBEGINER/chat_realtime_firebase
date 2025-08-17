@@ -1,5 +1,6 @@
 import React from 'react';
 import UserInfor from './UserInfor';
+
 function SideBar(props) {
     const { user, conversations, handleUserClick } = props;
     return (

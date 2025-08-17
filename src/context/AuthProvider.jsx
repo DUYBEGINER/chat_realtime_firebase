@@ -16,7 +16,7 @@ function AuthProvider({children}) {
 
     React.useEffect(() => {
         const unsubcribe = auth.onAuthStateChanged(user => {
-            console.log(user);
+            console.log("user login:", {user});
             if(user) {
                 const {displayName, uid, email, photoURL } = user;
                 setUser({
@@ -26,11 +26,11 @@ function AuthProvider({children}) {
                     photoURL 
                 });
                 setLoading(false);
-                navigate('/appchat', { replace: true });
+                navigate('/', { replace: true });
             } else {
                 setUser({});
                 setLoading(false);
-                navigate('/', { replace: true });
+                navigate('/login', { replace: true });
             }
         })
         //clean function
