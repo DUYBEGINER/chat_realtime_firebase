@@ -82,7 +82,7 @@ function AppChat(props) {
     }, [user]);
 
     return (
-        <div className={`h-screen grid grid-flow-col md:grid-cols-[320px_1fr]`}>
+        <div className={`h-screen grid grid-flow-col md:grid-cols-[390px_1fr]`}>
            <SideBar user={user} conversations={conversations} handleUserClick={handleUserClick} />
 
             <div className="bg-gray-600 grid grid-rows-[auto_1fr_auto] h-screen">
