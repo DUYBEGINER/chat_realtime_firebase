@@ -16,21 +16,6 @@ const provider = new FacebookAuthProvider();
 provider.addScope('email');
 
 
-export async function addNewUserToFirestore(user, providerId) {
-  try {
-    await setDoc(doc(db, "accounts", user.uid), {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      providerId: providerId,
-      createdAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error("Error adding user to Firestore:", error);
-  }
-}
-
-
 // Login by Email and Password)
 export async function loginEmailPassword(email, password) {
   try {
@@ -92,8 +77,7 @@ export async function Logout() {
 // Sign up with Email and Password function
 export async function signUpWithEmailPassword({
   email,
-  password,
-  displayName,      // tuỳ chọn: display name
+  password,      // tuỳ chọn: display name
 }) {
   try {
     // Create account
@@ -101,15 +85,6 @@ export async function signUpWithEmailPassword({
     const user = cred.user;
     console.log("Account created:", user);
 
-    //Save profile in Firestore by uid
-    await setDoc(doc(db, "accounts", user.uid), {
-      uid: user.uid,
-      email: user.email,
-      displayName: displayName ?? null,
-      providerId: "password",
-      createdAt: serverTimestamp(),
-    });
-    console.log("reach!")
     // 4) (tuỳ chọn) Gửi email xác minh
     //   await sendEmailVerification(user);
 

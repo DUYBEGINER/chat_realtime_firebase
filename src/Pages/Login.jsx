@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { login } from "../services/LoginApi";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
-import { loginEmailPassword, loginWithFacebook, addNewUserToFirestore } from "../services/authAPI"; // Import the login function
+import { loginEmailPassword, loginWithFacebook} from "../services/authAPI"; // Import the login function
 import { toast } from "react-toastify";
+import { addDocument } from "../services/firestoreService";
 
 function Login(props) {
   const navigate = useNavigate();
@@ -25,16 +26,18 @@ function Login(props) {
   const handle_Fblogin = async () => {
      try {
       const { user, additionalUserInfo } = await loginWithFacebook();
-      console.log("Facebook login successful:", user);
-      console.log("additionalUserInfo:", additionalUserInfo);
 
       if (additionalUserInfo?.isNewUser) {
-        await addNewUserToFirestore(user, additionalUserInfo.providerId);
+        addDocument("users", {
+          uid: user.uid,
+          email: user.email,
+          photoURL: user.photoURL,
+          displayName: user.displayName,
+          provider: additionalUserInfo.providerId,
+        });
       }
-
       toast.success("Đăng nhập thành công");
     } catch (error) {
-      console.error("Error logging in with Facebook:", error);
       toast.error("Đăng nhập bằng Facebook thất bại!");
     }
   };
@@ -51,7 +54,6 @@ function Login(props) {
       }
     } catch (e) {
       toast.error("Tên đăng nhập hoặc mật khẩu không đúng!");
-      console.log(e.message);
     }
   };
 
