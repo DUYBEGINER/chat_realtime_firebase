@@ -27,11 +27,11 @@ export const checkAccountExisted = (email) => {
   });
 };
 
-export const addNewAccount = async (accountData) => {
-    const account = collection(db, "accounts");
-     await addDoc(account, {
-      ...accountData,
-      createdAt: serverTimestamp()
-    });
-}
+// export const addNewAccount = async (accountData) => {
+//     const account = collection(db, "accounts");
+//      await addDoc(account, {
+//       ...accountData,
+//       createdAt: serverTimestamp()
+//     });
+// }
 

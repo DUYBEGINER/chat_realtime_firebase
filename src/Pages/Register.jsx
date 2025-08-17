@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
-import { checkAccountExisted } from '../api/RegisterApi';
+import { checkAccountExisted } from '../services/RegisterApi';
 import { validateSignup } from '../utils/validators';
-import { signUpWithEmailPassword } from '../api/authAPI';
+import { signUpWithEmailPassword } from '../services/authAPI';
 import { toast } from "react-toastify";
 import Spiner from '../components/Spiner';
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { login } from "../api/LoginApi";
+import { login } from "../services/LoginApi";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
-import { loginEmailPassword, loginWithFacebook, addNewUserToFirestore } from "../api/authAPI"; // Import the login function
+import { loginEmailPassword, loginWithFacebook, addNewUserToFirestore } from "../services/authAPI"; // Import the login function
 import { toast } from "react-toastify";
 
 function Login(props) {

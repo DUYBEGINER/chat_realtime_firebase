@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Flex} from 'antd'
-import { Logout } from '../../api/authAPI'; 
+import { Logout } from '../../services/authAPI'; 
 
 
 function UserInfor(props) {

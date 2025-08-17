@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {getConversations, sendMessage, listenMessages} from '../../api/MessageApi';
+import {getConversations, sendMessage, listenMessages} from '../../services/MessageApi';
 import HeaderApp from './HeaderApp';
 import SideBar from './SideBar';
 import {AuthContext} from '../../context/AuthProvider';
