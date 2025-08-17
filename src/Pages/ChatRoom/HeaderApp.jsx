@@ -8,7 +8,6 @@ function HeaderApp(props) {
     const [theme, setTheme] = useTheme('light');
 
     const switchTheme = () => {
-        console.log("Switching theme", theme);
         setTheme(theme === 'light' ? 'dark' : 'light');
     };
 

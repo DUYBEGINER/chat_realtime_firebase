@@ -2,12 +2,12 @@ import React, { useState} from 'react';
 import {auth} from "../firebase/config";
 import { useNavigate } from 'react-router';
 import Spiner from '../components/Spiner';
-
+import { useLocation } from 'react-router';
 
 export const AuthContext = React.createContext(null);
 
 function AuthProvider({children}) {
-
+    const location = useLocation();
     const [user, setUser] = React.useState({});
     const [loading, setLoading] = useState(true);
 
@@ -30,7 +30,9 @@ function AuthProvider({children}) {
             } else {
                 setUser({});
                 setLoading(false);
-                navigate('/login', { replace: true });
+                if(location.pathname !== '/register' && location.pathname !== '/login') {
+                    navigate('/login', { replace: true });
+                }
             }
         })
         //clean function

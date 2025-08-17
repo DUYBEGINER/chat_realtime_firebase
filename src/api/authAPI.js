@@ -15,14 +15,30 @@ import { doc, setDoc, getDocs, serverTimestamp, collection, query, where } from 
 const provider = new FacebookAuthProvider();
 provider.addScope('email');
 
-// Login function (use Email and Password)
+
+export async function addNewUserToFirestore(user, providerId) {
+  try {
+    await setDoc(doc(db, "accounts", user.uid), {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      providerId: providerId,
+      createdAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error("Error adding user to Firestore:", error);
+  }
+}
+
+
+// Login by Email and Password)
 export async function loginEmailPassword(email, password) {
   try {
     //Login by Firebase Authentication
     const cred = await signInWithEmailAndPassword(auth, email, password);
 
     // Get user profile from Firestore
-    const accountsRef = collection(db, "accounts"); // ❗️phải là collection
+    const accountsRef = collection(db, "accounts"); //collection accounts
     const q = query(
       accountsRef,
       where("uid", "==", cred.user.uid)
@@ -37,7 +53,7 @@ export async function loginEmailPassword(email, password) {
       return {
         email: userData.email,
         uid: userData.uid,
-        username: userData.username || "Anonymous",
+        displayName: userData.displayName || "Anonymous",
       };
     } else {
       return null;
@@ -48,14 +64,13 @@ export async function loginEmailPassword(email, password) {
   }
 }
 
-//Login with Facebook function
+//Login by Facebook
 export async function loginWithFacebook() {
   try {
-    const user = await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
     // Get additional user info (isNewUser, profile, etc.)
-    const additional = getAdditionalUserInfo(user);
-    console.log("User additionalUserInfo:", additional);
-    return user;
+    const  additionalUserInfo  = getAdditionalUserInfo(result);
+    return { user: result.user,  additionalUserInfo };
   } catch (error) {
     console.error("Error logging in with Facebook:", error);
     throw error;
@@ -78,7 +93,7 @@ export async function Logout() {
 export async function signUpWithEmailPassword({
   email,
   password,
-  username,      // tuỳ chọn: display name
+  displayName,      // tuỳ chọn: display name
 }) {
   try {
     // Create account
@@ -90,8 +105,8 @@ export async function signUpWithEmailPassword({
     await setDoc(doc(db, "accounts", user.uid), {
       uid: user.uid,
       email: user.email,
-      username: username ?? null,
-      provider: "password",
+      displayName: displayName ?? null,
+      providerId: "password",
       createdAt: serverTimestamp(),
     });
     console.log("reach!")

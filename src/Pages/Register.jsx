@@ -10,7 +10,7 @@ function Register(props) {
 
     const [accountData, setAccountData] = useState({
         email: "",
-        username: "",
+        displayName: "",
         password: "",
         confirmPassword: ""
     });
@@ -20,7 +20,7 @@ function Register(props) {
     // Định nghĩa cấu hình các field
     const fields = [
         { id: "email", type: "email", label: "Email", autoComplete: "email" },
-        { id: "username", type: "text", label: "Username" },
+        { id: "displayName", type: "text", label: "Username" },
         { id: "password", type: showPassword ? "text" : "password", label: "Password", toggle: true },
         { id: "confirmPassword", type: showConfirmPassword ? "text" : "password", label: "Confirm Password", toggle: true }
     ];
@@ -39,10 +39,11 @@ function Register(props) {
   };
 
   console.log("errorInput", errorsInput)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorsInput({}); // reset errors each submit
-    const { email, password, username } = accountData;
+    const { email, password, displayName } = accountData;
     try {
         const validation = validateSignup(accountData);
         if (!validation.valid) {
@@ -60,7 +61,7 @@ function Register(props) {
         }
 
         //Call API Sign up with firebase
-        await signUpWithEmailPassword({ email, password, username });
+        await signUpWithEmailPassword({ email, password, displayName });
 
         toast.success("Đăng kí thành công!");
         setTimeout(() => {
@@ -152,7 +153,7 @@ function Register(props) {
           <div className="mt-6">
             <p className="text-center text-sm text-gray-100">
               Đã có tài khoản?{' '}
-              <Link to="/" className="font-semibold text-indigo-500 hover:text-indigo-400">
+              <Link to="/login" className="font-semibold text-indigo-500 hover:text-indigo-400">
                 Đăng nhập
               </Link>
             </p>

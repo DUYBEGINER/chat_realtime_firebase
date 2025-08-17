@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { login } from "../api/LoginApi";
 import { useNavigate } from "react-router";
 import { Link } from "react-router";
-import { loginEmailPassword, loginWithFacebook } from "../api/authAPI"; // Import the login function
+import { loginEmailPassword, loginWithFacebook, addNewUserToFirestore } from "../api/authAPI"; // Import the login function
 import { toast } from "react-toastify";
 
 function Login(props) {
@@ -22,16 +22,21 @@ function Login(props) {
   };
 
   //LOGIN WITH FACEBOOK
-  const handle_Fblogin = () => {
-    loginWithFacebook()
-      .then((user) => {
-        console.log("Facebook login successful:", user);
-        console.log("User additionalUserInfo:", user.additionalUserInfo);
-      })
-      .catch((error) => {
-        console.error("Error logging in with Facebook:", error);
-        toast.error("Đăng nhập bằng Facebook thất bại!");
-      });
+  const handle_Fblogin = async () => {
+     try {
+      const { user, additionalUserInfo } = await loginWithFacebook();
+      console.log("Facebook login successful:", user);
+      console.log("additionalUserInfo:", additionalUserInfo);
+
+      if (additionalUserInfo?.isNewUser) {
+        await addNewUserToFirestore(user, additionalUserInfo.providerId);
+      }
+
+      toast.success("Đăng nhập thành công");
+    } catch (error) {
+      console.error("Error logging in with Facebook:", error);
+      toast.error("Đăng nhập bằng Facebook thất bại!");
+    }
   };
 
   //LOGIN WITH EMAIL AND PASSWORD

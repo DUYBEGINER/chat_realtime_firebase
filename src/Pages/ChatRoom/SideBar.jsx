@@ -22,7 +22,7 @@ function SideBar(props) {
                         <img className="h-10 w-10" src="https://images.icon-icons.com/1378/PNG/512/avatardefault_92824.png"></img>
                         <div className="flex-1 text-left">
                             <div className="flex items-center justify-between">
-                                <p className="font-semibold text-zinc-800 dark:text-white">{user.username}</p>
+                                <p className="font-semibold text-zinc-800 dark:text-white">{user.displayName}</p>
                                 <span className="text-xs text-gray-500 dark:text-zinc-200">9:11 pm</span>
                             </div>
                             <p className="text-sm text-gray-500 truncate">Last message</p>
