@@ -14,6 +14,7 @@
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.11",
     "antd": "^5.27.0",
+    "date-fns": "^4.1.0",
     "firebase": "^12.1.0",
     "firebase-admin": "^13.4.0",
     "lodash": "^4.17.21",

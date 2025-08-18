@@ -4,7 +4,7 @@ import { Modal, Form, Input, Select, Avatar, Spin } from "antd";
 import { addDocument } from "../../services/firestoreService";
 import { AuthContext } from "../../context/AuthProvider";
 import { debounce } from "lodash";
-import { doc, setDoc, getDocs, serverTimestamp,onSnapshot, collection, query, where, orderBy, limit } from "firebase/firestore";
+import { doc, setDoc, getDocs, updateDoc, serverTimestamp, onSnapshot, collection, query, where, orderBy, limit } from "firebase/firestore";
 import {db} from '../../firebase/config'; // 🔹 Import db from config
 
 function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
@@ -16,7 +16,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
       setFetching(true);
       setOptions([]);
 
-      fetchOptions(value).then((newOptions) => {
+      fetchOptions(value, props.curMembers).then((newOptions) => {
         setOptions(newOptions);
         setFetching(false);
       });
@@ -47,7 +47,7 @@ function DebounceSelect({ fetchOptions, debounceTimeout = 300, ...props }) {
   );
 }
 
-async function fetchUserList(search) {
+async function fetchUserList(search, curMembers) {
    const q = query(
     collection(db, "accounts"),
     where("keywords", "array-contains", search),
@@ -61,12 +61,11 @@ async function fetchUserList(search) {
     label: doc.data().displayName,
     value: doc.data().uid,
     photoURL: doc.data().photoURL,
-  }));
+  })).filter((item) => !curMembers.includes(item.value));
 }
 
 function InviteMemberModal(props) {
-  const { isInviteMemberVisible, setIsInviteMemberVisible } =
-    React.useContext(AppContext);
+  const { isInviteMemberVisible, setIsInviteMemberVisible, selectedRoomId, selectedRoom } = React.useContext(AppContext);
   const {
     user: { uid },
   } = React.useContext(AuthContext);
@@ -79,6 +78,12 @@ function InviteMemberModal(props) {
 
     //reset form value
     form.resetFields();
+
+    //Update members in curent room
+    const roomRef = doc(db, "rooms", selectedRoomId);
+    updateDoc(roomRef, {
+      members: [...selectedRoom.members, ...value.map((item) => item.value)],
+    });
 
     setIsInviteMemberVisible(false);
   };
@@ -108,6 +113,7 @@ function InviteMemberModal(props) {
             onChange={(newValue) => setValue(newValue)}
             value={value}
             className="w-full"
+            curMembers={selectedRoom.members}
           />
         </Form>
       </Modal>

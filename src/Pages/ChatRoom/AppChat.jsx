@@ -3,95 +3,63 @@ import {getConversations, sendMessage, listenMessages} from '../../services/Mess
 import HeaderApp from './HeaderApp';
 import SideBar from './SideBar';
 import {AuthContext} from '../../context/AuthProvider';
+import { AppContext } from '../../context/AppProvider';
 import ChatWindow from './ChatWindow';
+import { addDocument } from '../../services/firestoreService';
+import useFirestore from '../../hook/useFirestore';
 
 function AppChat(props) {
-    const { user } = useContext(AuthContext);
+    const { user: {uid, photoURL, displayName}} = useContext(AuthContext);
 
-    const [currentUserChat, setCurrentUserChat] = useState(null);
-    const [chatData, setChatData] = useState([]);
-    const [messageData, setMessageData] = useState({
-        content: '',
-        sender: user?.email ?? '',          // guard an toàn
-        receiver: currentUserChat?.email ?? ''
-    });
-
-     // Đồng bộ receiver khi chọn user chat
-    useEffect(() => {
-        setMessageData(prev => ({ ...prev, sender: user?.email ?? '', receiver: currentUserChat?.email ?? '' }));
-    }, [user?.email, currentUserChat?.email]);
-
-
-    useEffect(() => {
-        if (!user?.email || !currentUserChat?.email) {
-            // console.log("email listen:", user?.email, currentUserChat?.email);
-            return;
-        };
-        const unsubscribe = listenMessages(user.email, currentUserChat.email, (messages) => {
-            setChatData(messages);
-        });
-        return () => unsubscribe && unsubscribe();
-    }, [user?.email, currentUserChat?.email]);
+   const {selectedRoom} = useContext(AppContext);
 
 
 
+    const [inputValue, setInputValue] = useState('');
+    
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setMessageData((prev) => ({ ...prev, [name]: value }));
+        setInputValue(e.target.value);
     };
 
+   
     const handleSendMessage = async () => {
-        const content = messageData.content.trim();
-        // console.log("Message sent:", messageData);
-        if (!content || !currentUserChat || !user?.email) {
-            // console.log("content", content)
-            // console.log("currentUserChat", currentUserChat)
-            // console.log("user?.email", user?.email)
-            return;
-        };
-        await sendMessage({
-        content,
-        sender: user.email,
-        receiver: currentUserChat.email
+        if (!inputValue.trim()) return;
+        addDocument("messages", {
+            text: inputValue,
+            uid,
+            photoURL,
+            roomId: selectedRoom.id,
+            displayName,
         });
-        
-        // clear input
-        setMessageData(prev => ({ ...prev, content: '' }));
+
+        setInputValue('');
     };
-    // console.log("chatdata:", chatData);
 
-    const handleUserClick = (user) => {
-        setCurrentUserChat(user);
-       
-    }
-
-    const [conversations, setConversations] = useState([]);
-
-    // console.log("current user:", currentUserChat)
-
-    useEffect(() =>  {
-        const fetchData = async () => {
-            if (user) {
-                const conversationsData = await getConversations(user.email);
-                setConversations(conversationsData);
-            }
+    const condition = React.useMemo(() => {
+        return {
+            fieldName: "roomId",
+            operator: "==",
+            compareValue: selectedRoom.id,
         }
-        fetchData();
-    }, [user]);
+    }, [selectedRoom.id]);
+    console.log("current room", selectedRoom);
+    const messages = useFirestore("messages", condition);
 
+     console.log("Messages:", messages);
     return (
         <div className={`h-screen grid grid-flow-col md:grid-cols-[390px_1fr]`}>
-           <SideBar user={user} conversations={conversations} handleUserClick={handleUserClick} />
+           <SideBar/>
             <div className="bg-gray-600 grid grid-rows-[auto_1fr_auto] h-screen">
-                <HeaderApp currentUserChat={currentUserChat} />
-                <ChatWindow/>
+                <HeaderApp />
+                <ChatWindow messages={messages} />
 
                 <div className="bg-white dark:bg-bgdark flex border border-gray-300 dark:border-gray-500 px-4 py-4 gap-3">
-                    <input onChange={handleChange} type="text" name="content"  placeholder="Type your message..." className="flex-1 bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 focus:outline-1 focus:border-gray-300" />
+                    <input value={inputValue} onChange={handleChange} type="text" name="message"  placeholder="Type your message..." className="flex-1 bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 focus:outline-1 focus:border-gray-300" />
                     <button onClick={() => handleSendMessage()}   className="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-600 transition-colors">
                         Send
                     </button>
                 </div>
+
             </div>
         </div>
     );

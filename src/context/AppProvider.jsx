@@ -2,7 +2,6 @@ import React from "react";
 import { AuthContext } from "./AuthProvider";
 import useFirestore from "../hook/useFirestore";
 
-
 export const AppContext = React.createContext();
 
 function AppProvider({ children }) {
@@ -25,9 +24,7 @@ function AppProvider({ children }) {
   console.log("Rooms:", rooms);
 
   // Store selected room ID
-  const [selectedRoomId, setSelectedRoomId] = React.useState(
-    rooms[0]?.id || {},
-  );
+  const [selectedRoomId, setSelectedRoomId] = React.useState(rooms[0]?.id || {});
 
   React.useEffect(() => {
     setSelectedRoomId(rooms[0]?.id || "");
