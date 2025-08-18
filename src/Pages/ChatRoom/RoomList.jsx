@@ -1,10 +1,12 @@
 import React, { use } from "react";
 import useFirestore from "../../hook/useFirestore";
 import { AuthContext } from "../../context/AuthProvider";
+import { AppContext } from "../../context/AppProvider";
 
 function RoomList(props) {
 
   const {user: { uid }} = React.useContext(AuthContext);
+  const { rooms } = React.useContext(AppContext);
   /**
    * {
    * name: 'room name',
@@ -13,17 +15,9 @@ function RoomList(props) {
    * }
    */
 
-  const roomsCondition = React.useMemo(() => {
-    return {
-      fieldName: "members",
-      operator: "array-contains",
-      compareValue: uid
-    }
-  }, [uid])
+  
 
-  const rooms = useFirestore("rooms", roomsCondition);
-
-  console.log("Rooms:", rooms);
+  console.log("Rooms Rooms list", rooms);
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">

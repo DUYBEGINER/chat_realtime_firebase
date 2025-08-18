@@ -1,13 +1,17 @@
 import React from 'react';
 import UserInfor from './UserInfor';
 import RoomList from './RoomList';
+import { Button} from 'antd';
+import {PlusIcon} from '@heroicons/react/24/outline';
+import { AppContext } from '../../context/AppProvider';
+
 function SideBar(props) {
-    const { user, conversations, handleUserClick } = props;
 
+    const { setIsAddRoomVisible } = React.useContext(AppContext);
 
-
-
-
+    const handleAddRoom = () => {
+        setIsAddRoomVisible(true);
+    };
 
     return (
         <div className="bg-white dark:bg-bgdark flex flex-col min-h-0">
@@ -20,6 +24,10 @@ function SideBar(props) {
                 </div>
                 <input type="search" className="block w-full p-4 ps-10 text-sm text-gray-900  rounded-2xl focus:outline-none bg-gray-50 dark:bg-zinc-700 dark:text-zinc-50 focus:ring-blue-500 focus:border-gray-500" placeholder="Search">
                 </input>
+            </div>
+
+            <div className="p-2">
+                <Button icon={<PlusIcon className="w-6 h-6"/>} onClick={handleAddRoom}>Thêm phòng</Button>
             </div>
 
             <RoomList />

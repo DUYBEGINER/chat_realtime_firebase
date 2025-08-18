@@ -7,12 +7,15 @@ import { Routes, Route } from 'react-router'
 import { ToastContainer } from "react-toastify";
 import  AuthProvider from './context/AuthProvider';
 import "react-toastify/dist/ReactToastify.css";
+import AppProvider from './context/AppProvider'
+import AddRoomModal from './components/AddRoomModal';
 
 function App() { useState(0)
 
   return (
     <div className="app-container bg-slate-800 ">
       <AuthProvider>
+        <AppProvider>
         <ToastContainer
           position="top-center"
           autoClose={3000}
@@ -28,6 +31,8 @@ function App() { useState(0)
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<AppChat />} />
         </Routes>
+        <AddRoomModal />
+        </AppProvider>
     </AuthProvider>
   </div>
   )
