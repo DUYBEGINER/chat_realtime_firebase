@@ -21,8 +21,9 @@ function AppChat(props) {
         setInputValue(e.target.value);
     };
 
-   
-    const handleSendMessage = async () => {
+
+    const handleSendMessage = async (e) => {
+        e.preventDefault();
         if (!inputValue.trim()) return;
         addDocument("messages", {
             text: inputValue,
@@ -54,10 +55,12 @@ function AppChat(props) {
                 <ChatWindow messages={messages} />
 
                 <div className="bg-white dark:bg-bgdark flex border border-gray-300 dark:border-gray-500 px-4 py-4 gap-3">
-                    <input value={inputValue} onChange={handleChange} type="text" name="message"  placeholder="Type your message..." className="flex-1 bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 focus:outline-1 focus:border-gray-300" />
-                    <button onClick={() => handleSendMessage()}   className="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-600 transition-colors">
-                        Send
-                    </button>
+                    <form className="flex w-full" onSubmit={handleSendMessage}>
+                        <input value={inputValue} onChange={handleChange} type="text" name="message"  placeholder="Type your message..." className="flex-1 bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 focus:outline-1 focus:border-gray-300" />
+                        <button type="submit" onClick={handleSendMessage}   className="bg-blue-500 px-4 py-2 rounded-lg text-white hover:bg-blue-600 transition-colors">
+                            Send
+                        </button>
+                    </form>
                 </div>
 
             </div>
