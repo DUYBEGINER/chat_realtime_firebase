@@ -5,7 +5,6 @@ import { validateSignup } from "../utils/validators";
 import { signUpWithEmailPassword } from "../services/authAPI";
 import { toast } from "react-toastify";
 import Spiner from "../components/Spiner";
-import { addDocument } from "../services/firestoreService";
 
 function Register(props) {
   const [errorsInput, setErrorsInput] = useState({});
@@ -56,16 +55,7 @@ function Register(props) {
       }
 
       //Call API Sign up with firebase
-      const user = await signUpWithEmailPassword({ email, password });
-      if (user) {
-        addDocument("accounts", {
-          uid: user.uid,
-          email: user.email,
-          displayName: displayName,
-          providerId: "password",
-          photoURL: user.photoURL,
-        });
-      }
+      await signUpWithEmailPassword({ email, password, displayName });
 
       toast.success("Đăng kí thành công!");
       setTimeout(() => {

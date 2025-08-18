@@ -1,8 +1,8 @@
 import React from 'react';
-import { AppContext } from '../context/AppProvider';
+import { AppContext } from '../../context/AppProvider';
 import { Modal, Form, Input} from 'antd';
-import { addDocument } from '../services/firestoreService';
-import { AuthContext } from '../context/AuthProvider';
+import { addDocument } from '../../services/firestoreService';
+import { AuthContext } from '../../context/AuthProvider';
 
 function AddRoomModal(props) {
     const {isAddRoomVisible, setIsAddRoomVisible} = React.useContext(AppContext);

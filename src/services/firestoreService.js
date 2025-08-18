@@ -1,13 +1,73 @@
-import { collection, doc, setDoc, serverTimestamp, } from "firebase/firestore";
+import { collection, doc, setDoc, addDoc, serverTimestamp, } from "firebase/firestore";
 import {db} from '../firebase/config'; // 🔹 Import db from config
 
-export const addDocument = (collectionName, data) => {
-    console.log("Adding document to collection:", collectionName, data);
-    const query = collection(db, collectionName);
-
-   setDoc(doc(query), {
-       ...data,
-       createdAt: serverTimestamp(),
-   });
+export const addDocument = async (collectionName, data) => {
+    try {
+    const res = await addDoc(collection(db, collectionName), {
+      ...data,
+      createdAt: serverTimestamp(),
+    });
+    console.log("Document written with ID: ", res.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
    
 }
+
+
+// tao keywords cho displayName, su dung cho search
+export const generateKeywords = (displayName) => {
+  // liet ke tat cac hoan vi. vd: name = ["David", "Van", "Teo"]
+  // => ["David", "Van", "Teo"], ["David", "Teo", "Van"], ["Teo", "David", "Van"],...
+  const name = displayName.split(' ').filter((word) => word);
+
+  const length = name.length;
+  let flagArray = [];
+  let result = [];
+  let stringArray = [];
+
+  /**
+   * khoi tao mang flag false
+   * dung de danh dau xem gia tri
+   * tai vi tri nay da duoc su dung
+   * hay chua
+   **/
+  for (let i = 0; i < length; i++) {
+    flagArray[i] = false;
+  }
+
+  const createKeywords = (name) => {
+    const arrName = [];
+    let curName = '';
+    name.split('').forEach((letter) => {
+      curName += letter;
+      arrName.push(curName);
+    });
+    return arrName;
+  };
+
+  function findPermutation(k) {
+    for (let i = 0; i < length; i++) {
+      if (!flagArray[i]) {
+        flagArray[i] = true;
+        result[k] = name[i];
+
+        if (k === length - 1) {
+          stringArray.push(result.join(' '));
+        }
+
+        findPermutation(k + 1);
+        flagArray[i] = false;
+      }
+    }
+  }
+
+  findPermutation(0);
+
+  const keywords = stringArray.reduce((acc, cur) => {
+    const words = createKeywords(cur);
+    return [...acc, ...words];
+  }, []);
+
+  return keywords;
+};

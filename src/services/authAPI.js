@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 
 import { doc, setDoc, getDocs, serverTimestamp, collection, query, where } from "firebase/firestore";
-
+import { generateKeywords } from "./firestoreService";
 
 const provider = new FacebookAuthProvider();
 provider.addScope('email');
@@ -78,6 +78,7 @@ export async function Logout() {
 export async function signUpWithEmailPassword({
   email,
   password,      // tuỳ chọn: display name
+  displayName,
 }) {
   try {
     // Create account
@@ -87,7 +88,16 @@ export async function signUpWithEmailPassword({
 
     // 4) (tuỳ chọn) Gửi email xác minh
     //   await sendEmailVerification(user);
-
+     //Save profile in Firestore by uid
+    await setDoc(doc(db, "accounts", user.uid), {
+      uid: user.uid,
+      email: user.email,
+      displayName: displayName ?? null,
+      provider: "password",
+      createdAt: serverTimestamp(),
+      keywords: generateKeywords(displayName),
+    });
+    
     // Trả về user cho UI
     return user;
   } catch (e) {

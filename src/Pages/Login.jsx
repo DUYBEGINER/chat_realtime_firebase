@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router";
 import { loginEmailPassword, loginWithFacebook} from "../services/authAPI"; // Import the login function
 import { toast } from "react-toastify";
-import { addDocument } from "../services/firestoreService";
+import { addDocument, generateKeywords } from "../services/firestoreService";
 
 function Login(props) {
   const navigate = useNavigate();
@@ -34,6 +34,7 @@ function Login(props) {
           photoURL: user.photoURL,
           displayName: user.displayName,
           provider: additionalUserInfo.providerId,
+          keywords: generateKeywords(user.displayName),
         });
       }
       toast.success("Đăng nhập thành công");

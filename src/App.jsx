@@ -8,8 +8,8 @@ import { ToastContainer } from "react-toastify";
 import  AuthProvider from './context/AuthProvider';
 import "react-toastify/dist/ReactToastify.css";
 import AppProvider from './context/AppProvider'
-import AddRoomModal from './components/AddRoomModal';
-
+import AddRoomModal from './components/Modal/AddRoomModal';
+import InviteMemberModal from './components/Modal/InviteMemberModal'
 function App() { useState(0)
 
   return (
@@ -32,6 +32,7 @@ function App() { useState(0)
           <Route path="/" element={<AppChat />} />
         </Routes>
         <AddRoomModal />
+        <InviteMemberModal />
         </AppProvider>
     </AuthProvider>
   </div>
