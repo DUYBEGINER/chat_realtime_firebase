@@ -58,9 +58,9 @@ function Register(props) {
       await signUpWithEmailPassword({ email, password, displayName });
 
       toast.success("Đăng kí thành công!");
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 1500); // delay for toast to show before redirecting
+      // setTimeout(() => {
+      //   window.location.href = "/";
+      // }, 1500); // delay for toast to show before redirecting
     } catch (e) {
       console.error("Error checking account existence:", e);
       toast.error("Đã xảy ra lỗi!");

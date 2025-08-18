@@ -2,6 +2,7 @@ import { auth, db } from "../firebase/config";
 
 import {
   signInWithEmailAndPassword,
+  updateProfile,
   createUserWithEmailAndPassword,
   signInWithPopup,
   FacebookAuthProvider,
@@ -84,6 +85,12 @@ export async function signUpWithEmailPassword({
     // Create account
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     const user = cred.user;
+
+    // cập nhật displayName trong Firebase Authentication
+    await updateProfile(user, {
+      displayName: displayName,
+    });
+    
     console.log("Account created:", user);
 
     // 4) (tuỳ chọn) Gửi email xác minh

@@ -77,6 +77,7 @@ function Login(props) {
           action="#"
           className="space-y-6"
           onSubmit={handle_LoginWithEmailAndPassword}
+
         >
           <div>
             <label
@@ -118,6 +119,7 @@ function Login(props) {
 
           <div>
             <button
+              type="button" 
               onClick={handle_Fblogin}
               className="w-full px-3 py-1.5 border border-blue-600 text-blue-500 hover:bg-blue-500 hover:text-white"
             >
