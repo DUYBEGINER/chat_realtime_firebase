@@ -6,7 +6,7 @@ import { AppContext } from "../../context/AppProvider";
 function RoomList(props) {
 
   const {user: { uid }} = React.useContext(AuthContext);
-  const { rooms } = React.useContext(AppContext);
+  const { rooms, selectedRoomId, setSelectedRoomId } = React.useContext(AppContext);
   /**
    * {
    * name: 'room name',
@@ -17,7 +17,6 @@ function RoomList(props) {
 
   
 
-  console.log("Rooms Rooms list", rooms);
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
@@ -25,6 +24,7 @@ function RoomList(props) {
         <div
           className="w-full p-4 bg-white  flex items-center gap-3 hover:bg-gray-200 dark:bg-transparent dark:hover:bg-gray-700"
           key={room.id}
+          onClick={() => setSelectedRoomId(room.id)}
         >
           <img
             className="h-10 w-10"

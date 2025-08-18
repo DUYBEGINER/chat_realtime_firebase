@@ -9,7 +9,7 @@ function AppProvider({ children }) {
 
     const [isAddRoomVisible, setIsAddRoomVisible] = React.useState(false);
 
-
+    const [selectedRoomId, setSelectedRoomId] = React.useState('');
 
     const roomsCondition = React.useMemo(() => {
     return {
@@ -23,7 +23,7 @@ function AppProvider({ children }) {
     console.log("Rooms:", rooms);
 
     return (
-        <AppContext.Provider value={{ rooms, isAddRoomVisible, setIsAddRoomVisible }}>
+        <AppContext.Provider value={{ rooms, isAddRoomVisible, setIsAddRoomVisible, selectedRoomId, setSelectedRoomId }}>
             {children}
         </AppContext.Provider>
        

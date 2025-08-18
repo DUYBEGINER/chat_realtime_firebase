@@ -3,9 +3,13 @@ import { VideoCameraIcon, InformationCircleIcon, UserPlusIcon } from '@heroicons
 import SwitchThemeBtn from '../../components/SwitchThemeBtn';
 import useTheme from '../../hook/useTheme';
 import { Avatar, Divider, Tooltip, Button } from 'antd';
-
+import { AppContext } from '../../context/AppProvider';
 function HeaderApp(props) {
     const [theme, setTheme] = useTheme('light');
+    const {selectedRoomId} = React.useContext(AppContext);
+
+    console.log("Selected Room ID:", selectedRoomId);
+
 
     const switchTheme = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');

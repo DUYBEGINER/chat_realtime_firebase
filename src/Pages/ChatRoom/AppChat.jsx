@@ -24,7 +24,7 @@ function AppChat(props) {
 
     useEffect(() => {
         if (!user?.email || !currentUserChat?.email) {
-            console.log("email listen:", user?.email, currentUserChat?.email);
+            // console.log("email listen:", user?.email, currentUserChat?.email);
             return;
         };
         const unsubscribe = listenMessages(user.email, currentUserChat.email, (messages) => {
@@ -42,11 +42,11 @@ function AppChat(props) {
 
     const handleSendMessage = async () => {
         const content = messageData.content.trim();
-        console.log("Message sent:", messageData);
+        // console.log("Message sent:", messageData);
         if (!content || !currentUserChat || !user?.email) {
-            console.log("content", content)
-            console.log("currentUserChat", currentUserChat)
-            console.log("user?.email", user?.email)
+            // console.log("content", content)
+            // console.log("currentUserChat", currentUserChat)
+            // console.log("user?.email", user?.email)
             return;
         };
         await sendMessage({
@@ -58,7 +58,7 @@ function AppChat(props) {
         // clear input
         setMessageData(prev => ({ ...prev, content: '' }));
     };
-    console.log("chatdata:", chatData);
+    // console.log("chatdata:", chatData);
 
     const handleUserClick = (user) => {
         setCurrentUserChat(user);
@@ -67,7 +67,7 @@ function AppChat(props) {
 
     const [conversations, setConversations] = useState([]);
 
-    console.log("current user:", currentUserChat)
+    // console.log("current user:", currentUserChat)
 
     useEffect(() =>  {
         const fetchData = async () => {

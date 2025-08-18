@@ -5,7 +5,7 @@ import { AuthContext } from '../../context/AuthProvider';
 
 function UserInfor(props) {
    const { user } = useContext(AuthContext);
-    console.log("UserInfor", user);
+    // console.log("UserInfor", user);
     return (
         <div className='flex items-center justify-between'>
             <div className='flex items-center'>

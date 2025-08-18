@@ -4,7 +4,6 @@ const useTheme = () => {
     const [theme, setTheme] = useState(localStorage.getItem('theme') ? localStorage.getItem('theme') : 'system');
     const element = document.documentElement;
     const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    console.log(`Current theme: ${theme}`);
 
     const onWindowMatch = () => {
         if( localStorage.theme === "dark" || (!("theme" in localStorage) && darkQuery.matches)) {

@@ -34,7 +34,7 @@ const useFirestore = (collectionName, condition) => {
         ...doc.data(),
       }));
       setDocuments(data);
-      console.log("Data from Firestore:", data);
+      // console.log("Data from Firestore:", data);
     });
   }, [collectionName, condition]);
 
