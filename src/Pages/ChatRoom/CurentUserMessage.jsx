@@ -7,7 +7,7 @@ function CurentUserMessage({ text, displayName, createAt, photoURL }) {
       {/* Header: time, name, avatar */}
       <div className="flex items-center gap-2 mb-1">
         <p className="text-xs text-gray-500">{createAt}</p>
-        <p className="font-bold">{displayName}</p>
+        <p className="font-bold dark:text-white">{displayName}</p>
         <Avatar src={photoURL}>
           {photoURL ? "" : displayName?.charAt(0)?.toUpperCase()}
         </Avatar>

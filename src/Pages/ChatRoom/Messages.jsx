@@ -7,7 +7,7 @@ function Messages({ text, displayName, createAt, photoURL }) {
     <div className="mb-3">
       <div className="flex gap-1 ">
         <Avatar src={photoURL}>{photoURL ? '' : displayName?.charAt(0)?.toUpperCase()}</Avatar>
-        <p className="text-md font-bold ml-1 mt-0">{displayName}</p>
+        <p className="text-md font-bold ml-1 mt-0 dark:text-white">{displayName}</p>
         <p className="text-sm text-gray-500 mt-0.5">{createAt}</p>
       </div>
       <div className="ml-10 flex bg-gray-100 p-2 w-fit max-w-[70%] rounded-2xl px-4 py-2 shadow-sm">
