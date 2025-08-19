@@ -9,6 +9,8 @@ function AppProvider({ children }) {
     user: { uid },
   } = React.useContext(AuthContext);
 
+  // const [loading, setLoading] = React.useState(true);
+
   const [isAddRoomVisible, setIsAddRoomVisible] = React.useState(false);
   const [isInviteMemberVisible, setIsInviteMemberVisible] = React.useState(false);
 
@@ -24,7 +26,7 @@ function AppProvider({ children }) {
   console.log("Rooms:", rooms);
 
   // Store selected room ID
-  const [selectedRoomId, setSelectedRoomId] = React.useState(rooms[0]?.id || {});
+  const [selectedRoomId, setSelectedRoomId] = React.useState(rooms[0]?.id || "");
 
   React.useEffect(() => {
     setSelectedRoomId(rooms[0]?.id || "");
@@ -36,7 +38,7 @@ function AppProvider({ children }) {
   );
 
   const usersCondition = React.useMemo(() => {
-    return {
+    return {  
       fieldName: "uid",
       operator: "in",
       compareValue: selectedRoom?.members || [],
@@ -44,7 +46,8 @@ function AppProvider({ children }) {
   }, [selectedRoom?.members]);
 
   const members = useFirestore("accounts", usersCondition);
-  console.log("Members:", members);
+  
+  
 
   return (
     <AppContext.Provider

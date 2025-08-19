@@ -2,6 +2,8 @@ import React, { use } from "react";
 import useFirestore from "../../hook/useFirestore";
 import { AuthContext } from "../../context/AuthProvider";
 import { AppContext } from "../../context/AppProvider";
+import { Skeleton } from "antd";
+
 
 function RoomList(props) {
 
@@ -20,11 +22,14 @@ function RoomList(props) {
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto">
-      {rooms.map((room) => (
-        <div
-          className={`w-full p-4 ${selectedRoomId === room.id ? 'bg-gray-200' : ''} flex items-center  gap-3 hover:bg-gray-200 dark:bg-transparent dark:hover:bg-gray-700`}
-          key={room.id}
-          onClick={() => setSelectedRoomId(room.id)}
+      { rooms.length === 0 ? (
+        <Skeleton active />
+      ) : (
+        rooms.map((room) => (
+          <div
+            className={`w-full p-4 ${selectedRoomId === room.id ? 'bg-gray-200' : ''} flex items-center  gap-3 hover:bg-gray-200 dark:bg-transparent dark:hover:bg-gray-700`}
+            key={room.id}
+            onClick={() => setSelectedRoomId(room.id)}
         >
           <img
             className="h-10 w-10"
@@ -42,7 +47,7 @@ function RoomList(props) {
             <p className="text-sm text-gray-500 truncate">{room.description}</p>
           </div>
         </div>
-      ))}
+      )))}
     </div>
   );
 }

@@ -10,7 +10,7 @@ import {
 
 const useFirestore = (collectionName, condition) => {
   const [documents, setDocuments] = React.useState([]);
-
+  
   React.useEffect(() => {
     let coollectionRef = collection(db, collectionName);
     let q = query(coollectionRef, orderBy("createdAt", "desc"));
