@@ -14,9 +14,9 @@ function UserInfor(props) {
             </div>
             <div className='mr-3'>
                 <Flex wrap gap="small" className="site-button-ghost-wrapper">
-                    <Button type="primary" danger ghost variant="outlined" onClick={() => Logout()}>
+                    <button className="rounded text-red-600 font-semibold px-4 py-1 outline outline-red-600 hover:bg-red-500 hover:text-white transition-colors duration-300 ease-in-out" onClick={() => Logout()}>
                         Đăng xuất
-                    </Button>
+                    </button>
                 </Flex>
             </div>
         </div>
